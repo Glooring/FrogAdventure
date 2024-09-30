@@ -121,14 +121,21 @@
 		/* Fullscreen button styles */
         #fullscreen-button {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
             cursor: pointer;
             background-image: url('fullscreen-icon.png'); /* Replace with your fullscreen icon */
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+			display: none; /* Initially hidden */
+			z-index: 1000; /* Ensure it's above other elements */
+			opacity: 0.6;
         }
+		
+		#fullscreen-button:hover {
+			opacity: 0.5;
+		}
     </style>
 </head>
 <body>
@@ -384,6 +391,11 @@
                 if (progress === 1) {
                     setStatusMode('hidden');
                     initializing = false;
+					// Show the fullscreen button after loading completes
+					let fullscreenButton = document.getElementById('fullscreen-button');
+					if (fullscreenButton) {
+						fullscreenButton.style.display = 'block';  // Show the fullscreen button
+					}
                 } else {
                     statusProgressInner.style.width = `${(progress * 100)}%`;
                     setStatusMode('progress');
