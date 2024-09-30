@@ -117,6 +117,25 @@
             visibility: visible;
             padding: 4px 6px;
         }
+		
+		/* Fullscreen button styles */
+        #fullscreen-button {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            background-image: url('fullscreen-icon.png'); /* Replace with your fullscreen icon */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+			display: none; /* Initially hidden */
+			z-index: 1000; /* Ensure it's above other elements */
+			opacity: 0.4;
+        }
+		
+		#fullscreen-button:hover {
+			opacity: 0.3;
+		}
     </style>
 </head>
 <body>
@@ -140,6 +159,7 @@
 
     <!-- Unity Container -->
     <div id="unity-container">
+		<div id="fullscreen-button"></div> <!-- Fullscreen button added here -->
         <canvas id="unity-canvas" tabindex="1"></canvas>
     </div>
     <script>
@@ -205,6 +225,20 @@
         let container = document.getElementById("unity-container");
         let unityInstance = null;
 
+
+		// Add event listener to the fullscreen button
+        let fullscreenButton = document.getElementById('fullscreen-button');
+        if (fullscreenButton) {
+            fullscreenButton.addEventListener('click', function() {
+                if (!document.fullscreenElement) {
+                    container.requestFullscreen().catch(err => {
+                        console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+        }
         // Loading Screen Elements
         const status = document.getElementById('status');
         const statusProgress = document.getElementById('status-progress');
@@ -301,6 +335,9 @@
 			canvas.style.width = cssWidth + 'px';
 			canvas.style.height = cssHeight + 'px';
 
+
+			let marginLeft = (availableWidth - cssWidth) / 2;
+            let marginTop = (availableHeight - cssHeight) / 2;
 			// Center the canvas within the container
 			canvas.style.marginLeft = ((availableWidth - cssWidth) / 2) + 'px';
 			canvas.style.marginTop = ((availableHeight - cssHeight) / 2) + 'px';
@@ -308,6 +345,18 @@
 			// Apply CSS to ensure pixelated rendering
 			canvas.style.imageRendering = 'pixelated'; // For modern browsers
 			canvas.style.imageRendering = 'crisp-edges'; // For older browsers
+			
+			// Position the fullscreen button
+            if (fullscreenButton) {
+                if (marginLeft > 60) { // Adjust threshold as needed
+                    fullscreenButton.style.left = (marginLeft / 2 - 28) + 'px'; // Adjust as needed
+                    fullscreenButton.style.top = '50%';
+                    fullscreenButton.style.transform = 'translateY(-50%)';
+                    fullscreenButton.style.display = 'block';
+                } else {
+                    fullscreenButton.style.display = 'none';
+                }
+            }
 		}
 
 
@@ -342,6 +391,11 @@
                 if (progress === 1) {
                     setStatusMode('hidden');
                     initializing = false;
+					// Show the fullscreen button after loading completes
+					let fullscreenButton = document.getElementById('fullscreen-button');
+					if (fullscreenButton) {
+						fullscreenButton.style.display = 'block';  // Show the fullscreen button
+					}
                 } else {
                     statusProgressInner.style.width = `${(progress * 100)}%`;
                     setStatusMode('progress');
