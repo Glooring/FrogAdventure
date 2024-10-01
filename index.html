@@ -359,6 +359,17 @@
         };
 
         document.body.appendChild(script);
+		
+		// Function to trigger fullscreen from Unity
+        function requestFullscreenFromUnity() {
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
     </script>
 </body>
 </html>
