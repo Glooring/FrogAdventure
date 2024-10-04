@@ -143,8 +143,6 @@
         <canvas id="unity-canvas" tabindex="1"></canvas>
     </div>
     <script>
-	      var buildUrl = "Build";
-	      var loaderUrl = buildUrl + "/FrogAdventureWeb.loader.js";
 		function getDevicePixelRatio() {
 			// Get the default device pixel ratio from the browser
 			let devicePixelRatio = window.devicePixelRatio || 1;
@@ -175,6 +173,8 @@
 			//console.log(`Final devicePixelRatio: ${devicePixelRatio} (Mobile: ${isMobile})`);
 			return devicePixelRatio;
 		}
+	var buildUrl = "Build";
+	var loaderUrl = buildUrl + "/FrogAdventureWeb.loader.js";
 	var config = {
 		dataUrl: buildUrl + "/FrogAdventureWeb.data",
 		frameworkUrl: buildUrl + "/FrogAdventureWeb.framework.js",
